@@ -1,5 +1,4 @@
 #include "font.h"
-#include "scale.h"
 #include "protocol.h"
 #include "conio.h"
 #include "math.h"
@@ -10,9 +9,6 @@ unsigned char CharHigh=16;
 padPt TTYLoc;
 padPt statusLoc={0,0};
 extern padBool FastText; /* protocol.c */
-extern unsigned short scalex[];
-extern unsigned short scaley[];
-
 extern unsigned char font[];
 extern unsigned char fontm23[];
 extern unsigned short fontptr[];
@@ -20,8 +16,11 @@ extern unsigned char FONT_SIZE_X;
 extern unsigned char FONT_SIZE_Y;
 extern BaudRate io_baud_rate;
 
+// Miscellaneous math functions needed for coordinate translation.
 short max(short a, short b) { return ( a > b ) ? a : b; }
 short min(short a, short b) { return ( a < b ) ? a : b; }
+short scaley(short y) { return (((y^0x01FF) << 1) * 3) >> 4; }
+short scalex(short x) { return (x >> 1); }
 
 /**
  * screen_init() - Set up the screen
@@ -112,10 +111,10 @@ void screen_block_draw(padPt* Coord1, padPt* Coord2)
 {
   int y;
   int mode;
-  int x1=min(scalex[Coord1->x],scalex[Coord2->x]);
-  int x2=max(scalex[Coord1->x],scalex[Coord2->x]);
-  int y1=min(scaley[Coord1->y],scaley[Coord2->y]);
-  int y2=max(scaley[Coord1->y],scaley[Coord2->y]);
+  int x1=min(scalex(Coord1->x),scalex(Coord2->x));
+  int x2=max(scalex(Coord1->x),scalex(Coord2->x));
+  int y1=min(scaley(Coord1->y),scaley(Coord2->y));
+  int y2=max(scaley(Coord1->y),scaley(Coord2->y));
 
   screen_set_pen_mode();
 
@@ -137,9 +136,9 @@ void screen_dot_draw(padPt* Coord)
 {
   screen_set_pen_mode();
   if (CurMode==ModeErase)
-    bm_clearpixel(scalex[Coord->x],scaley[Coord->y]);
+    bm_clearpixel(scalex(Coord->x),scaley(Coord->y));
   else
-    bm_setpixel(scalex[Coord->x],scaley[Coord->y]);
+    bm_setpixel(scalex(Coord->x),scaley(Coord->y));
 }
 
 /**
@@ -147,10 +146,10 @@ void screen_dot_draw(padPt* Coord)
  */
 void screen_line_draw(padPt* Coord1, padPt* Coord2)
 {
-  unsigned short x1=scalex[Coord1->x];
-  unsigned short x2=scalex[Coord2->x];
-  unsigned short y1=scaley[Coord1->y];
-  unsigned short y2=scaley[Coord2->y];
+  unsigned short x1=scalex(Coord1->x);
+  unsigned short x2=scalex(Coord2->x);
+  unsigned short y1=scaley(Coord1->y);
+  unsigned short y2=scaley(Coord2->y);
   
   screen_set_pen_mode();
   if (CurMode==ModeErase)
@@ -219,15 +218,13 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
 
   bm_setforeground(mainColor);
 
-  x=scalex[(Coord->x&0x1FF)];
-  y=scaley[(Coord->y)+14&0x1FF];
+  x=scalex((Coord->x&0x1FF));
+  y=scaley((Coord->y)+14&0x1FF);
   
   if (FastText==padF)
     {
       goto chardraw_with_fries;
     }
-
-  y=scaley[(Coord->y)+14&0x1FF];
 
   /* the diet chardraw routine - fast text output. */
   
