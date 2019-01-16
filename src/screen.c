@@ -368,9 +368,14 @@ void screen_tty_char(padByte theChar)
     }
   else if ((theChar == 0x08) && (TTYLoc.x > 7))	/* backspace */
     {
+      padPt ec1,ec2;
       TTYLoc.x -= CharWide;
-      // screen_block_draw(&scalex[TTYLoc.x],&scaley[TTYLoc.y],&scalex[TTYLoc.x+CharWide],&scaley[TTYLoc.y+CharHigh]);
-    }
+      ec1.x=TTYLoc.x;
+      ec1.y=TTYLoc.y;
+      ec2.x=TTYLoc.x+CharWide;
+      ec2.y=TTYLoc.y+CharHigh;
+      screen_block_draw(&ec1,&ec2);
+   }
   else if (theChar == 0x0A)			/* line feed */
     TTYLoc.y -= CharHigh;
   else if (theChar == 0x0D)			/* carriage return */
