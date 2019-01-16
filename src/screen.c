@@ -11,7 +11,6 @@ padPt statusLoc={0,0};
 extern padBool FastText; /* protocol.c */
 extern unsigned char font[];
 extern unsigned char fontm23[];
-extern unsigned short fontptr[];
 extern unsigned char FONT_SIZE_X;
 extern unsigned char FONT_SIZE_Y;
 extern BaudRate io_baud_rate;
@@ -21,6 +20,8 @@ short max(short a, short b) { return ( a > b ) ? a : b; }
 short min(short a, short b) { return ( a < b ) ? a : b; }
 short scaley(short y) { return (((y^0x01FF) << 1) * 3) >> 4; }
 short scalex(short x) { return (x >> 1); }
+
+#define FONTPTR(a) (((a << 1) + a) << 1)
 
 /**
  * screen_init() - Set up the screen
@@ -217,7 +218,8 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
     mainColor=COLOR_WHITE;
 
   bm_setforeground(mainColor);
-
+  bm_setbackground(altColor);
+  
   x=scalex((Coord->x&0x1FF));
   y=scaley((Coord->y)+14&0x1FF);
   
@@ -233,7 +235,7 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
       a=*ch;
       ++ch;
       a+=offset;
-      p=&curfont[fontptr[a]];
+      p=&curfont[FONTPTR(a)];
       
       for (j=0;j<FONT_SIZE_Y;++j)
   	{
@@ -291,7 +293,7 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
       a=*ch;
       ++ch;
       a+=offset;
-      p=&curfont[fontptr[a]];
+      p=&curfont[FONTPTR(a)];
       for (j=0;j<FONT_SIZE_Y;++j)
   	{
   	  b=*p;
@@ -307,11 +309,26 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
 	      py=&y;
 	    }
 
+	  // special 9918 specific hack for inverse video
+	  if (CurMode==ModeInverse)
+	    {
+	      for (k=0;k<FONT_SIZE_X;++k)
+		{
+		  if (ModeBold)
+		    {
+		      bm_setpixel(*px+1,*py);
+		      bm_setpixel(*px,*py+1);
+		      bm_setpixel(*px+1,*py+1);
+		    }
+		  bm_setpixel(*px,*py);
+		}
+	    }
+	  
   	  for (k=0;k<FONT_SIZE_X;++k)
   	    {
   	      if (b<0) /* check sign bit. */
 		{
-		  bm_setforeground(mainColor);
+		  /* bm_setforeground(mainColor); */
 		  if (ModeBold)
 		    {
 		      bm_setpixel(*px+1,*py);
@@ -324,7 +341,7 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
 		{
 		  if (CurMode==ModeInverse || CurMode==ModeRewrite)
 		    {
-		      bm_setforeground(altColor);
+		      /* bm_setforeground(altColor); */
 		      if (ModeBold)
 			{
 			  bm_clearpixel(*px+1,*py);
