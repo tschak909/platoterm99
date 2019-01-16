@@ -3,10 +3,12 @@
 #include "protocol.h"
 #include "conio.h"
 #include "math.h"
+#include "io.h"
 
 unsigned char CharWide=8;
 unsigned char CharHigh=16;
 padPt TTYLoc;
+padPt statusLoc={0,0};
 extern padBool FastText; /* protocol.c */
 extern unsigned short scalex[];
 extern unsigned short scaley[];
@@ -16,6 +18,7 @@ extern unsigned char fontm23[];
 extern unsigned short fontptr[];
 extern unsigned char FONT_SIZE_X;
 extern unsigned char FONT_SIZE_Y;
+extern BaudRate io_baud_rate;
 
 short max(short a, short b) { return ( a > b ) ? a : b; }
 short min(short a, short b) { return ( a < b ) ? a : b; }
@@ -109,10 +112,10 @@ void screen_block_draw(padPt* Coord1, padPt* Coord2)
 {
   int y;
   int mode;
-  int x1=min(Coord1->x,Coord2->x);
-  int x2=max(Coord1->x,Coord2->x);
-  int y1=min(Coord1->y,Coord2->y);
-  int y2=max(Coord1->y,Coord2->y);
+  int x1=min(scalex[Coord1->x],scalex[Coord2->x]);
+  int x2=max(scalex[Coord1->x],scalex[Coord2->x]);
+  int y1=min(scaley[Coord1->y],scaley[Coord2->y]);
+  int y2=max(scaley[Coord1->y],scaley[Coord2->y]);
 
   screen_set_pen_mode();
 
@@ -123,7 +126,7 @@ void screen_block_draw(padPt* Coord1, padPt* Coord2)
 
   for (y=y1;y<y2;y++)
     {
-      bm_drawline(scalex[x1],scaley[y],scalex[x2],scaley[y],0);
+      bm_drawline(x1,y,x2,y,0);
     }
 }
 
@@ -412,6 +415,58 @@ void screen_background(padRGB* theColor)
  */
 void screen_paint(padPt* Coord)
 {
+}
+
+/**
+ * screen_clear_status(void)
+ * Clear status area
+ */
+void screen_clear_status(void)
+{
+  padPt coord1={0,0};
+  padPt coord2={511,CharHigh};
+  screen_block_draw(&coord1,&coord2);
+}
+
+/**
+ * screen_show_status(msg)
+ */
+void screen_show_status(unsigned char* msg,int len)
+{
+  screen_clear_status();
+  screen_char_draw(&statusLoc,msg,len);
+}
+
+/**
+ * screen_show_baud_rate - Show baud rate
+ */
+void screen_show_baud_rate(void)
+{
+  screen_clear_status();
+  switch(io_baud_rate)
+    {
+    case BAUD_300:
+      screen_show_status("300 baud.",9);
+      break;
+    case BAUD_1200:
+      screen_show_status("1200 baud.",10);
+      break;
+    case BAUD_2400:
+      screen_show_status("2400 baud.",10);
+      break;
+    case BAUD_4800:
+      screen_show_status("4800 baud.",10);
+      break;
+    case BAUD_9600:
+      screen_show_status("9600 baud.",10);
+      break;
+    case BAUD_19200:
+      screen_show_status("19200 baud.",11);
+      break;
+    case BAUD_38400:
+      screen_show_status("38400 baud.",11);
+      break;      
+    }
 }
 
 /**

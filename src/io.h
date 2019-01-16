@@ -13,6 +13,17 @@
 #define XON  0x11
 #define XOFF 0x13
 
+typedef enum _baudRate
+  {
+   BAUD_300,
+   BAUD_1200,
+   BAUD_2400,
+   BAUD_4800,
+   BAUD_9600,
+   BAUD_19200,
+   BAUD_38400
+  } BaudRate;
+
 /**
  * io_init() - Set-up the I/O
  */
@@ -29,15 +40,21 @@ void io_init_funcptrs(void);
 void io_open(void);
 
 /**
+ * io_set_baud_rate(void)
+ * Set new baud rate
+ */
+void io_set_baud_rate(void);
+
+/**
+ * io_toggle_baud_rate(void)
+ * Set next baud rate.
+ */
+void io_toggle_baud_rate(void);
+
+/**
  * io_send_byte(b) - Send specified byte out
  */
 void io_send_byte(int b);
-
-/**
- * io_send_byte1(b) - Send specified byte out
- */
-void io_send_byte1(int b);
-
 
 /**
  * io_main() - The IO main loop

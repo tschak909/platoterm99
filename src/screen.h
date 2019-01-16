@@ -108,6 +108,11 @@ void screen_background(padRGB* theColor);
 void screen_paint(padPt* Coord);
 
 /**
+ * screen_show_baud_rate - Show baud rate
+ */
+void screen_show_baud_rate(void);
+
+/**
  * screen_done()
  * Close down TGI
  */

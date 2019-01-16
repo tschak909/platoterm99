@@ -4,6 +4,7 @@
 #include "protocol.h"
 #include "conio.h"
 #include "io.h"
+#include "screen.h"
 
 unsigned char ch;
 
@@ -31,7 +32,13 @@ void keyboard_main(void)
       ch=cgetc();
       if (TTY)
 	{
-	  keyboard_out_tty(ch);
+	  if (ch==0xBC) // FCTN-0 - Toggle Baud rate
+	    {
+	      io_toggle_baud_rate();
+	      screen_show_baud_rate();
+	    }
+	  else
+	    keyboard_out_tty(ch);
 	}
       else
 	{
