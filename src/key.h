@@ -21,7 +21,7 @@ int key_to_pkey[]={
     PKEY_NOKEY, /* 0x0c CTRL-L */
     PKEY_NEXT, /* 0x0d CTRL-M */
     PKEY_EDIT, /* 0x0e CTRL-N */
-    PKEY_BACK1, /* 0x0f CTRL-O */
+    PKEY_BACK, /* 0x0f CTRL-O */
     PKEY_NOKEY, /* 0x10 CTRL-P */
     PKEY_NOKEY, /* 0x11 CTRL-Q */
     PKEY_NOKEY, /* 0x12 CTRL-R */
@@ -165,7 +165,7 @@ int key_to_pkey[]={
     PKEY_NOKEY, /* 0x9C */
     PKEY_NOKEY, /* 0x9D */
     PKEY_DIVIDE, /* 0x9E */
-    PKEY_BACK, /* 0x9F */
+    PKEY_BACK1, /* 0x9F */
     PKEY_NOKEY, /* 0xA0 */
     PKEY_NOKEY, /* 0xA1 */
     PKEY_NOKEY, /* 0xA2 */

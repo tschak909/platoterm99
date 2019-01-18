@@ -21,7 +21,7 @@ LDFLAGS_EA5=\
 NAME=libti99.a
 
 CFLAGS=\
-  -O2 -DRS232 -std=c99 -s --save-temp -I$(TMS9900_DIR)/lib/gcc/tms9900/4.4.0/include -I$(LIBTI99_DIR) -fno-builtin
+  -O2 -DTIPI -std=c99 -s --save-temp -I$(TMS9900_DIR)/lib/gcc/tms9900/4.4.0/include -I$(LIBTI99_DIR) -fno-builtin
 
 # List of compiled objects used in executable
 OBJECT_LIST=\
@@ -32,7 +32,9 @@ OBJECT_LIST=\
 	src/protocol.o \
 	src/screen.o \
 	src/terminal.o \
-	src/touch.o
+	src/touch.o \
+	src/tipi_msg.o \
+	src/ti_socket.o
 
 # Recipe to compile the library
 all: plato
