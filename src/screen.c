@@ -30,10 +30,10 @@ void screen_init(void)
 {
   bm_consolefont();
   set_bitmap(0);
-  bm_setbackground(COLOR_LTBLUE);
+  bm_setbackground(COLOR_BLACK);
   bm_setforeground(COLOR_WHITE);
-  bordercolor(COLOR_LTBLUE);
-  bgcolor(COLOR_LTBLUE);
+  bordercolor(COLOR_BLACK);
+  bgcolor(COLOR_BLACK);
   bm_clearscreen();
 }
 
@@ -97,7 +97,7 @@ void screen_set_pen_mode(void)
 {
   if (CurMode==ModeErase || CurMode==ModeInverse)
     {
-      bm_setforeground(COLOR_LTBLUE);
+      bm_setforeground(COLOR_BLACK);
     }
   else
     {
@@ -179,7 +179,7 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
   unsigned short deltaX=1;
   unsigned short deltaY=1;
   unsigned char mainColor=COLOR_WHITE;
-  unsigned char altColor=COLOR_LTBLUE;
+  unsigned char altColor=COLOR_BLACK;
   unsigned char *p;
   unsigned char* curfont;
   
@@ -205,7 +205,7 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
 
   if (CurMode==ModeRewrite)
     {
-      altColor=COLOR_LTBLUE;
+      altColor=COLOR_BLACK;
     }
   else if (CurMode==ModeInverse)
     {
@@ -213,7 +213,7 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
     }
   
   if (CurMode==ModeErase || CurMode==ModeInverse)
-    mainColor=COLOR_LTBLUE;
+    mainColor=COLOR_BLACK;
   else
     mainColor=COLOR_WHITE;
 

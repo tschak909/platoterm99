@@ -19,6 +19,9 @@ void io_init(void)
   rs232_setbps(RS232_CARD,RS232_9902A,RS232_BPS_1200);
   io_baud_rate=BAUD_1200;
 #endif
+#ifdef TIPI
+  connect("IRATA.ONLINE","8005");
+#endif
 }
 
 void io_set_baud_rate(void)
@@ -69,6 +72,10 @@ void io_send_byte(int b)
 #ifdef RS232
   rs232_writebyte(RS232_CARD,RS232_9902A,b);
 #endif
+#ifdef TIPI
+  unsigned char ob=b;
+  send_chars(&ob,1);
+#endif
 }
 
 void io_main(void)
@@ -81,6 +88,13 @@ void io_main(void)
       ib=rs232_readbyte(RS232_CARD,RS232_9902A);
       b=ib;
       ShowPLATO(&b,1);
+    }
+#endif
+#ifdef TIPI
+  int bufsize=read_socket();
+  if (bufsize)
+    {
+      ShowPLATO((padByte*)buffer,bufsize);
     }
 #endif
 }
