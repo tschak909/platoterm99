@@ -3,6 +3,7 @@
 #include "conio.h"
 #include "math.h"
 #include "io.h"
+#include "sound.h"
 
 unsigned char CharWide=8;
 unsigned char CharHigh=16;
@@ -24,16 +25,34 @@ short scalex(short x) { return (x >> 1); }
 #define FONTPTR(a) (((a << 1) + a) << 1)
 
 /**
+ * sndplay(sndlist, len) - Copy sound list into VDP and play
+ */
+void sndplay(unsigned char* sndlst, int len)
+{        
+    int vaddr = 0x1000; // address of a vdp buffer you know of, to put the sound list into
+
+    vdpmemcpy(vaddr, sndlst, len);
+    SET_SOUND_PTR(vaddr);
+    SET_SOUND_VDP();
+    START_SOUND();
+
+    // run the interrupt and wait for the sound to stop
+    while (SOUND_CNT) {
+        VDP_INT_POLL;
+    }
+}
+
+/**
  * screen_init() - Set up the screen
  */
 void screen_init(void)
 {
   bm_consolefont();
   set_bitmap(0);
-  bm_setbackground(COLOR_BLACK);
-  bm_setforeground(COLOR_WHITE);
-  bordercolor(COLOR_BLACK);
-  bgcolor(COLOR_BLACK);
+  bm_setbackground(COLOR_CYAN);
+  bm_setforeground(COLOR_BLACK);
+  bordercolor(COLOR_CYAN);
+  bgcolor(COLOR_CYAN);
   bm_clearscreen();
 }
 
@@ -80,6 +99,10 @@ void screen_wait(void)
  */
 void screen_beep(void)
 {
+    char beep[] = { 3, 0x80, 0x05, 0x91, 10, 
+    	1, 0x9f, 0 
+    };
+  sndplay(&beep[0], sizeof(beep));
 }
 
 /**
@@ -97,11 +120,11 @@ void screen_set_pen_mode(void)
 {
   if (CurMode==ModeErase || CurMode==ModeInverse)
     {
-      bm_setforeground(COLOR_BLACK);
+      bm_setforeground(COLOR_CYAN);
     }
   else
     {
-      bm_setforeground(COLOR_WHITE);
+      bm_setforeground(COLOR_BLACK);
     }
 }
 
@@ -178,8 +201,8 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
   unsigned char height=FONT_SIZE_Y;
   unsigned short deltaX=1;
   unsigned short deltaY=1;
-  unsigned char mainColor=COLOR_WHITE;
-  unsigned char altColor=COLOR_BLACK;
+  unsigned char mainColor=COLOR_BLACK;
+  unsigned char altColor=COLOR_CYAN;
   unsigned char *p;
   unsigned char* curfont;
   
@@ -205,17 +228,17 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
 
   if (CurMode==ModeRewrite)
     {
-      altColor=COLOR_BLACK;
+      altColor=COLOR_CYAN;
     }
   else if (CurMode==ModeInverse)
     {
-      altColor=COLOR_WHITE;
+      altColor=COLOR_BLACK;
     }
   
   if (CurMode==ModeErase || CurMode==ModeInverse)
-    mainColor=COLOR_BLACK;
+    mainColor=COLOR_CYAN;
   else
-    mainColor=COLOR_WHITE;
+    mainColor=COLOR_BLACK;
 
   bm_setforeground(mainColor);
   bm_setbackground(altColor);

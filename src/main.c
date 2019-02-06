@@ -7,6 +7,7 @@
 #include "terminal.h"
 #include "keyboard.h"
 #include "splash.h"
+#include "vdp.h"
 
 unsigned char already_started=false;
 
@@ -18,6 +19,7 @@ void main(void)
   io_init();
   for (;;)
     {
+      VDP_INT_POLL;
       keyboard_main();
       io_main();
     }
