@@ -22,14 +22,14 @@ short min(short a, short b) { return ( a < b ) ? a : b; }
 short scaley(short y) { return (((y^0x01FF) << 1) * 3) >> 4; }
 short scalex(short x) { return (x >> 1); }
 
-#define FONTPTR(a) (((a << 1) + a) << 1)
+#define FONTPTR(a) (a*6)
 
 /**
  * sndplay(sndlist, len) - Copy sound list into VDP and play
  */
 void sndplay(unsigned char* sndlst, int len)
 {        
-    int vaddr = 0x1000; // address of a vdp buffer you know of, to put the sound list into
+    int vaddr = 0x1800; // address of a vdp buffer you know of, to put the sound list into
 
     vdpmemcpy(vaddr, sndlst, len);
     SET_SOUND_PTR(vaddr);
@@ -338,15 +338,15 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
 	  if (CurMode==ModeInverse)
 	    {
 	      for (k=0;k<FONT_SIZE_X;++k)
-		{
-		  if (ModeBold)
-		    {
-		      bm_setpixel(*px+1,*py);
-		      bm_setpixel(*px,*py+1);
-		      bm_setpixel(*px+1,*py+1);
-		    }
-		  bm_setpixel(*px,*py);
-		}
+	  	{
+	  	  if (ModeBold)
+	  	    {
+	  	      bm_setpixel(*px+1,*py);
+	  	      bm_setpixel(*px,*py+1);
+	  	      bm_setpixel(*px+1,*py+1);
+	  	    }
+	  	  bm_setpixel(*px,*py);
+	  	}
 	    }
 	  
   	  for (k=0;k<FONT_SIZE_X;++k)

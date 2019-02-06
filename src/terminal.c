@@ -44,7 +44,7 @@ extern padPt TTYLoc;
 
 extern unsigned char already_started;
 
-#define FONTPTR(a) (((a << 1) + a) << 1)
+#define FONTPTR(a) (a*6)
 
 // Temporary PLATO character data, 8x16 matrix
 static unsigned char char_data[]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
@@ -303,8 +303,8 @@ void terminal_char_load(padWord charnum, charData theChar)
       // Algorithm B - Sparsely or heavily populated bitmaps
       for (u=16; u-->0; )
 	{
-	  if (pix_cnt >= 85)
-	    char_data[u]^=0xFF;
+	  /* if (pix_cnt >= 85) */
+	  /*   char_data[u]^=0xFF; */
 
 	  for (v=8; v-->0; )
 	    {
@@ -314,13 +314,13 @@ void terminal_char_load(padWord charnum, charData theChar)
 		}
 	    }
 	}
-      if (pix_cnt >= 85)
-      	{
-      	  for (u=6; u-->0; )
-      	    {
-      	      fontm23[FONTPTR(charnum)+u]^=0xFF;
-      	      fontm23[FONTPTR(charnum)+u]&=0xF8;
-      	    }
-      	}
+      /* if (pix_cnt >= 85) */
+      /* 	{ */
+      /* 	  for (u=6; u-->0; ) */
+      /* 	    { */
+      /* 	      fontm23[FONTPTR(charnum)+u]^=0xFF; */
+      /* 	      fontm23[FONTPTR(charnum)+u]&=0xF0; */
+      /* 	    } */
+      /* 	} */
     }
 }
