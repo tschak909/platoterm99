@@ -241,7 +241,6 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
     mainColor=COLOR_BLACK;
 
   bm_setforeground(mainColor);
-  bm_setbackground(altColor);
   
   x=scalex((Coord->x&0x1FF));
   if (ModeBold)
