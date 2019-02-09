@@ -28,7 +28,7 @@ static padWord theWord;		/* Data received for various data types */
 static padByte theChar;
 static padByte rawChar;
 static padByte lastChar;
-/* static padRGB theColor; */
+static padRGB theColor;
 static unsigned short LowX,		/* Previous coordinates received */
   HiX, LowY, HiY;
 static padPt CurCoord;		/* Current coordinate */
@@ -57,6 +57,9 @@ extern void screen_dot_draw(padPt* Coord);
 extern void screen_line_draw(padPt* Coord1, padPt* Coord2);
 extern void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count);
 extern void screen_tty_char(padByte theChar);
+extern void screen_foreground(padRGB* theColor);
+extern void screen_background(padRGB* theColor);
+extern void screen_paint(padPt* Coord);
 extern void terminal_mem_load(padWord addr, padWord value);
 extern void terminal_char_load(padWord charnum, charData theChar);
 extern void terminal_mode_5(padWord value);
@@ -646,13 +649,13 @@ GoMode (void)
       terminal_mode_7 (theWord);
       break;
     case mFore:
-      /*   screen_foreground(&theColor); */
+        screen_foreground(&theColor);
       break;
     case mBack:
-      /*   screen_background(&theColor); */
+        screen_background(&theColor);
       break;
     case mPaint:
-      /*   screen_paint(&CurCoord); */
+        screen_paint(&CurCoord);
       break;
     }
   CMode = PMode;
@@ -715,23 +718,23 @@ GoCoord (void)
 void
 GoColor (void)
 {
-  /* switch (Phase) */
-  /*   { */
-  /*   case 0: */
-  /*     theColor.blue = (theChar & 0x3f); */
-  /*     break; */
-  /*   case 1: */
-  /*     theColor.blue |= (theChar & 0x03) << 6; */
-  /*     theColor.green = (theChar & 0x3c) >> 2; */
-  /*     break; */
-  /*   case 2: */
-  /*     theColor.green |= (theChar & 0x0f) << 4; */
-  /*     theColor.red = (theChar & 0x30) >> 4; */
-  /*     break; */
-  /*   case 3: */
-  /*     theColor.red |= (theChar & 0x3f) << 2; */
-  /*     break; */
-  /*   } */
+  switch (Phase)
+    {
+    case 0:
+      theColor.blue = (theChar & 0x3f);
+      break;
+    case 1:
+      theColor.blue |= (theChar & 0x03) << 6;
+      theColor.green = (theChar & 0x3c) >> 2;
+      break;
+    case 2:
+      theColor.green |= (theChar & 0x0f) << 4;
+      theColor.red = (theChar & 0x30) >> 4;
+      break;
+    case 3:
+      theColor.red |= (theChar & 0x3f) << 2;
+      break;
+    }
   if (Phase < 3)
     Phase++;
   else
@@ -764,9 +767,9 @@ DataChar (void)
     case tColor:
       GoColor ();
       break;
-    /* case tPaint: */
-    /*   GoPaint (); */
-    /*   break; */
+    case tPaint:
+      GoPaint ();
+      break;
     }
 }
 
