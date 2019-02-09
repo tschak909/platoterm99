@@ -13,7 +13,6 @@ AR=$(TMS9900_DIR)/tms9900-ar
 ELF2EA5=$(ELF2EA5_DIR)/elf2ea5
 EA5_SPLIT=$(EA5_SPLIT_DIR)/ea5split
 LIBTI99_DIR=/home/thomc/Workspace/libti99
-LIBGCC_DIR=/cygdrive/d/tms9900/lib
 
 LDFLAGS_EA5=\
   --script=linkfile
@@ -39,7 +38,7 @@ OBJECT_LIST=\
 all: plato
 
 plato: $(OBJECT_LIST)
-	$(LD) $(OBJECT_LIST_EA5) $(OBJECT_LIST) $(LDFLAGS_EA5) -L$(LIBGCC_DIR) -lgcc -L$(LIBTI99_DIR) -lti99 -o plato.ea5.elf > ea5.map
+	$(LD) $(OBJECT_LIST_EA5) $(OBJECT_LIST) $(LDFLAGS_EA5) -L$(LIBTI99_DIR) -lti99 -o plato.ea5.elf > ea5.map
 	$(ELF2EA5) plato.ea5.elf plato.ea5.bin
 	$(EA5_SPLIT) plato.ea5.bin
 	cp PLAT* $(CLASSIC99_DSK1)
