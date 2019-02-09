@@ -9,6 +9,8 @@ unsigned char CharWide=8;
 unsigned char CharHigh=16;
 padPt TTYLoc;
 padPt statusLoc={0,0};
+unsigned char current_foreground=COLOR_WHITE;
+unsigned char current_background=COLOR_BLACK;
 extern padBool FastText; /* protocol.c */
 extern unsigned char font[];
 extern unsigned char fontm23[];
@@ -49,10 +51,10 @@ void screen_init(void)
 {
   bm_consolefont();
   set_bitmap(0);
-  bm_setbackground(COLOR_CYAN);
-  bm_setforeground(COLOR_BLACK);
-  bordercolor(COLOR_CYAN);
-  bgcolor(COLOR_CYAN);
+  bm_setbackground(current_background);
+  bm_setforeground(current_foreground);
+  bordercolor(current_background);
+  bgcolor(current_background);
   bm_clearscreen();
 }
 
@@ -118,14 +120,8 @@ void screen_clear(void)
  */
 void screen_set_pen_mode(void)
 {
-  if (CurMode==ModeErase || CurMode==ModeInverse)
-    {
-      bm_setforeground(COLOR_CYAN);
-    }
-  else
-    {
-      bm_setforeground(COLOR_BLACK);
-    }
+  bm_setbackground(current_background);
+  bm_setforeground(current_foreground);
 }
 
 /**
@@ -201,8 +197,8 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
   unsigned char height=FONT_SIZE_Y;
   unsigned short deltaX=1;
   unsigned short deltaY=1;
-  unsigned char mainColor=COLOR_BLACK;
-  unsigned char altColor=COLOR_CYAN;
+  unsigned char mainColor=current_foreground;
+  unsigned char altColor=current_background;
   unsigned char *p;
   unsigned char* curfont;
   
@@ -228,17 +224,17 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
 
   if (CurMode==ModeRewrite)
     {
-      altColor=COLOR_CYAN;
+      altColor=current_background;
     }
   else if (CurMode==ModeInverse)
     {
-      altColor=COLOR_BLACK;
+      altColor=current_foreground;
     }
   
   if (CurMode==ModeErase || CurMode==ModeInverse)
-    mainColor=COLOR_CYAN;
+    mainColor=current_background;
   else
-    mainColor=COLOR_BLACK;
+    mainColor=current_foreground;
 
   bm_setforeground(mainColor);
   
@@ -436,10 +432,55 @@ void screen_tty_char(padByte theChar)
 }
 
 /**
+ * screen_color - return closest match to requested color.
+ */
+unsigned char screen_color(padRGB* theColor)
+{
+  unsigned char red=theColor->red;
+  unsigned char green=theColor->green;
+  unsigned char blue=theColor->blue;
+  
+  if (red==0 && green==0 && blue==0)
+    {
+      current_foreground=COLOR_BLACK;
+    }
+  else if (red==0 && green==0 && blue==255)
+    {
+      current_foreground=COLOR_LTBLUE;
+    }
+  else if (red==0 && green==255 && blue==0)
+    {
+      current_foreground=COLOR_LTGREEN;
+    }
+  else if (red==255 && green==0 && blue==0)
+    {
+      current_foreground=COLOR_LTRED;
+    }
+  else if (red==0 && green==255 && blue==255)
+    {
+      current_foreground=COLOR_CYAN;
+    }
+  else if (red==255 && green==0 && blue==255)
+    {
+      current_foreground=COLOR_MAGENTA;
+    }
+  else if (red==255 && green==255 && blue==0)
+    {
+      current_foreground=COLOR_LTYELLOW;
+    }
+  else
+    {
+      current_foreground=COLOR_WHITE;
+    }
+}
+
+
+/**
  * screen_foreground - Called to set foreground color.
  */
 void screen_foreground(padRGB* theColor)
 {
+  current_foreground=screen_color(theColor);
 }
 
 /**
@@ -447,6 +488,7 @@ void screen_foreground(padRGB* theColor)
  */
 void screen_background(padRGB* theColor)
 {
+  /* current_background=screen_color(theColor); */
 }
 
 /**

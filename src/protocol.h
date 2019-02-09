@@ -23,7 +23,7 @@ typedef	unsigned char	padChar;
 typedef	short	padWord;
 typedef	padWord	charData[8];
 typedef	struct {
-	padByte	red,
+	int	red,
 		green,
 		blue;
 	} padRGB;
