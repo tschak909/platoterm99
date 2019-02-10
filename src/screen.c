@@ -185,10 +185,10 @@ void screen_line_draw(padPt* Coord1, padPt* Coord2)
 void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
 {
   short offset; /* due to negative offsets */
-  unsigned short x;      /* Current X and Y coordinates */
-  unsigned short y;
-  unsigned short* px;   /* Pointers to X and Y coordinates used for actual plotting */
-  unsigned short* py;
+  int x;      /* Current X and Y coordinates */
+  int y;
+  int* px;   /* Pointers to X and Y coordinates used for actual plotting */
+  int* py;
   unsigned char i; /* current character counter */
   unsigned char a; /* current character byte */
   unsigned char j,k; /* loop counters */
@@ -274,16 +274,26 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
 		}
 
 	      ++x;
+	      if (x>255)
+		x=x-256;
   	      b<<=1;
   	    }
 
 	  ++y;
+	  if (y>191)
+	    y=y-192;
 	  x-=width;
+	  if (x<0)
+	    x=256+x;
 	  ++p;
   	}
 
       x+=width;
+      if (x>255)
+	x=x-256;
       y-=height;
+      if (y>191)
+	y=y-192;
     }
 
   return;
@@ -374,17 +384,27 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
 		}
 
 	      x += deltaX;
+	      if (x>255)
+		x=x-256;
   	      b<<=1;
   	    }
 
 	  y+=deltaY;
+	  if (y>191)
+	    y=y-191;
 	  x-=width;
+	  if (x<0)
+	    x=256+x;
 	  ++p;
   	}
 
       Coord->x+=width;
       x+=width;
+      if (x>255)
+	x=x-256;
       y-=height;
+      if (y>191)
+	y=y-192;
     }
 
   return;
