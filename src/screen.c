@@ -129,24 +129,17 @@ void screen_set_pen_mode(void)
  */
 void screen_block_draw(padPt* Coord1, padPt* Coord2)
 {
-  int y;
   int mode;
   int x1=min(scalex(Coord1->x),scalex(Coord2->x));
   int x2=max(scalex(Coord1->x),scalex(Coord2->x));
   int y1=min(scaley(Coord1->y),scaley(Coord2->y));
   int y2=max(scaley(Coord1->y),scaley(Coord2->y));
-
+  int y;
+  
   screen_set_pen_mode();
 
-  if (CurMode==ModeErase)
-    mode=0;
-  else
-    mode=1;
-
-  for (y=y1;y<y2;y++)
-    {
-      bm_drawline(x1,y,x2,y,0);
-    }
+  for(y=y1;y<y2;y++)
+    bm_clearhlinefast(x1,y,x2);
 }
 
 /**
