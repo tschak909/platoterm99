@@ -69,6 +69,7 @@ extern void terminal_ext_allow(padBool allow);
 extern void terminal_set_ext_in(padWord device);
 extern void terminal_set_ext_out(padWord device);
 extern void terminal_ext_out(padByte value);
+extern void touch_allow(padBool allow);
 extern void screen_clear(void);
 extern void terminal_set_tty(void);
 extern void terminal_set_plato(void);
@@ -579,6 +580,7 @@ SSFx (void)
   if (device == 1)
     {
       terminal_ext_allow ((theWord >> 3) & 1);
+      touch_allow ((theWord >> 5) & 1);
     }
   else if ((theWord >> 9) & 1)
     {

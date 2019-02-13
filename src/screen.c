@@ -50,7 +50,7 @@ void sndplay(unsigned char* sndlst, int len)
 void screen_init(void)
 {
   bm_consolefont();
-  set_bitmap(0);
+  set_bitmap(VDP_SPR_16x16);
   bm_setbackground(current_background);
   bm_setforeground(current_foreground);
   bordercolor(current_background);
@@ -283,8 +283,8 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
 	  if (y>191)
 	    y=y-192;
 	  x-=width;
-	  if (x<0)
-	    x=256+x;
+	  /* if (x<0) */
+	  /*   x=256+x; */
 	  ++p;
   	}
 
@@ -390,8 +390,8 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
   	    }
 
 	  y+=deltaY;
-	  if (y>191)
-	    y=y-191;
+	  if (y>192)
+	    y=y-192;
 	  x-=width;
 	  if (x<0)
 	    x=256+x;
@@ -400,10 +400,10 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
 
       Coord->x+=width;
       x+=width;
-      if (x>255)
+      if (x>256)
 	x=x-256;
       y-=height;
-      if (y>191)
+      if (y>192)
 	y=y-192;
     }
 
@@ -459,7 +459,7 @@ unsigned char screen_color(padRGB* theColor)
   unsigned char red=theColor->red;
   unsigned char green=theColor->green;
   unsigned char blue=theColor->blue;
-  
+
   if (red==0 && green==0 && blue==0)
     {
       current_foreground=COLOR_BLACK;

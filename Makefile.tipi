@@ -34,7 +34,9 @@ OBJECT_LIST=\
 	src/terminal.o \
 	src/touch.o \
 	src/tipi_msg.o \
-	src/ti_socket.o
+	src/ti_socket.o \
+	src/tipi_mouse.o \
+	src/patterns.o
 
 # Recipe to compile the library
 all: plato
@@ -72,3 +74,6 @@ plato: $(OBJECT_LIST)
 # Recipe to compile all C files
 %.o: %.c
 	$(CC) -c $< $(CFLAGS) -o $@
+
+src/patterns.h: src/patterns.asm
+	grep "def gfx_" src/patterns.asm  | cut -d' ' -f2 | sed 's/^/extern const unsigned char /' | sed 's/$$/[2]\;/' >src/patterns.h

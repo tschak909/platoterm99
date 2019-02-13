@@ -15,6 +15,7 @@
 #include "terminal.h"
 #include "screen.h"
 #include "protocol.h"
+#include "touch.h"
 
 /**
  * ASCII Features to return in Features
@@ -107,6 +108,7 @@ void terminal_set_tty(void)
   if (already_started)
     screen_clear();
   TTY=true;
+  touch_allow(0);
   ModeBold=padF;
   Rotate=padF;
   Reverse=padF;
@@ -125,6 +127,7 @@ void terminal_set_tty(void)
 void terminal_set_plato(void)
 {
   TTY=false;
+  touch_allow(0);
   screen_clear();
 }
 
