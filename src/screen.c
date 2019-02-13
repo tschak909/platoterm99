@@ -31,7 +31,7 @@ short scalex(short x) { return (x >> 1); }
  */
 void sndplay(unsigned char* sndlst, int len)
 {        
-    int vaddr = 0x1800; // address of a vdp buffer you know of, to put the sound list into
+    int vaddr = 0x3f00; // address of a vdp buffer you know of, to put the sound list into
 
     vdpmemcpy(vaddr, sndlst, len);
     SET_SOUND_PTR(vaddr);
