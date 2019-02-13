@@ -59,7 +59,7 @@ unsigned int touch_scale_y(unsigned int y)
 /* Multiply by 2 = n<<4 for TI99 */
 unsigned int touch_scale_x(unsigned int x)
 {
-  return ((x<<4));
+  return ((x<<1));
 }
 
 /**
