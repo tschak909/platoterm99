@@ -59,37 +59,6 @@ void screen_init(void)
 }
 
 /**
- * screen_cycle_foreground()
- * Go to the next foreground color in palette
- */
-void screen_cycle_foreground(void)
-{
-}
-
-/**
- * screen_cycle_background()
- * Go to the next background color in palette
- */
-void screen_cycle_background(void)
-{
-}
-
-/**
- * screen_cycle_border()
- * Go to the next border color in palette
- */
-void screen_cycle_border(void)
-{
-}
-
-/**
- * screen_update_colors() - Set the terminal colors
- */
-void screen_update_colors(void)
-{
-}
-
-/**
  * screen_wait(void) - Sleep for approx 16.67ms
  */
 void screen_wait(void)
@@ -232,6 +201,7 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
   bm_setforeground(mainColor);
   
   x=scalex((Coord->x&0x1FF));
+
   if (ModeBold)
     y=scaley((Coord->y+30)&0x1FF);
   else
@@ -267,26 +237,16 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
 		}
 
 	      ++x;
-	      if (x>255)
-		x=x-256;
   	      b<<=1;
   	    }
 
 	  ++y;
-	  if (y>191)
-	    y=y-192;
 	  x-=width;
-	  /* if (x<0) */
-	  /*   x=256+x; */
 	  ++p;
   	}
 
       x+=width;
-      if (x>255)
-	x=x-256;
       y-=height;
-      if (y>191)
-	y=y-192;
     }
 
   return;
@@ -352,7 +312,6 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
   	    {
   	      if (b<0) /* check sign bit. */
 		{
-		  /* bm_setforeground(mainColor); */
 		  if (ModeBold)
 		    {
 		      bm_setpixel(*px+1,*py);
@@ -365,7 +324,6 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
 		{
 		  if (CurMode==ModeInverse || CurMode==ModeRewrite)
 		    {
-		      /* bm_setforeground(altColor); */
 		      if (ModeBold)
 			{
 			  bm_clearpixel(*px+1,*py);
@@ -377,31 +335,20 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
 		}
 
 	      x += deltaX;
-	      if (x>255)
-		x=x-256;
   	      b<<=1;
   	    }
 
 	  y+=deltaY;
-	  if (y>192)
-	    y=y-192;
 	  x-=width;
-	  if (x<0)
-	    x=256+x;
 	  ++p;
   	}
 
       Coord->x+=width;
       x+=width;
-      if (x>256)
-	x=x-256;
       y-=height;
-      if (y>192)
-	y=y-192;
     }
 
-  return;
-  
+  return;  
 }
 
 /**
