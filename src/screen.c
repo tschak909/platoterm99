@@ -241,12 +241,20 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
   	    }
 
 	  ++y;
+	  if (y>191)
+	    y-=192;
 	  x-=width;
+	  /* if (x<0) */
+	  /*   x=256+x; */
 	  ++p;
   	}
 
       x+=width;
+      /* if (x>255) */
+      /* 	x=256-x; */
       y-=height;
+      if (y<0)
+	y=192+y;
     }
 
   return;
@@ -335,17 +343,29 @@ void screen_char_draw(padPt* Coord, unsigned char* ch, unsigned char count)
 		}
 
 	      x += deltaX;
+	      /* if (x>255) */
+	      /* 	x=256-x; */
   	      b<<=1;
   	    }
 
 	  y+=deltaY;
+	  if (y>191)
+	    y-=192;
 	  x-=width;
+	  /* if (x<0) */
+	  /*   x=256+x; */
 	  ++p;
   	}
 
       Coord->x+=width;
+      /* if (Coord->x>255) */
+      /* 	x=256-x; */
       x+=width;
+      /* if (x>255) */
+      /* 	x=256-x; */
       y-=height;
+      if (y<0)
+	y=192+y;
     }
 
   return;  
