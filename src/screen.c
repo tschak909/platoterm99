@@ -135,9 +135,9 @@ void screen_line_draw(padPt* Coord1, padPt* Coord2)
   
   screen_set_pen_mode();
   if (CurMode==ModeErase)
-    bm_drawlinefast(x1,y1,x2,y2,1);
+    bm_drawline(x1,y1,x2,y2,0);
   else
-    bm_drawlinefast(x1,y1,x2,y2,0);
+    bm_drawline(x1,y1,x2,y2,1);
 
 }
 
