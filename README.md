@@ -113,7 +113,7 @@ ATDTCYBERSERV.ORG:8005
 
 PLATO Keyboard
 -------------------
-The PLATO keyboard is mapped to the Atari keys, like so:
+The PLATO keyboard is mapped to the TI keys, like so:
 
 | PLATO KEY  	| TI Key  	|
 |---	|---	|
