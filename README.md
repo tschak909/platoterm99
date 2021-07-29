@@ -15,8 +15,8 @@ Requirements
 * Floppy Disk or equivalent storage
 * Editor/Assembler Cartridge
 * Some form of connectivity, either:
-** TI RS232 Interface, connected to WIFI Modem, or
-** TIPI connected to WIFI or Ethernet (not done yet)
+  * TI RS232 Interface, connected to WIFI Modem, or
+  * TIPI connected to WIFI or Ethernet (not done yet)
 
 --------------------------------------------------------------
 What services are currently available to access via PLATOTerm?
@@ -113,7 +113,7 @@ ATDTCYBERSERV.ORG:8005
 
 PLATO Keyboard
 -------------------
-The PLATO keyboard is mapped to the Atari keys, like so:
+The PLATO keyboard is mapped to the TI keys, like so:
 
 | PLATO KEY  	| TI Key  	|
 |---	|---	|
